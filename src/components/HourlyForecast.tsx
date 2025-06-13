@@ -7,13 +7,32 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../components/ui/carousel";
-import {
-  formatDateTime,
-  getWeatherIcon,
-} from "../lib/utils";
+import { formatDateTime, getWeatherIcon } from "../lib/utils";
+import type { RootState } from "../store/store";
 
-const HourlyForecast = (hourlyDailyData) => {
-  const theme = useAppSelector((state) => state.theme.theme);
+export interface TimelineData {
+  time: string;
+  values: {
+    weatherCode?: number;
+    weatherCodeMax?: number;
+    temperature?: number;
+    temperatureAvg?: number;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+export interface HourlyDailyDataProps {
+  hourlyDailyData?: {
+    timelines?: {
+      daily?: TimelineData[];
+      hourly?: TimelineData[];
+    };
+  };
+}
+
+const HourlyForecast = (hourlyDailyData: HourlyDailyDataProps) => {
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
   const isDark = theme === "dark";
   const dailyData = hourlyDailyData?.hourlyDailyData?.timelines?.daily || [];
   const hourlyData = hourlyDailyData?.hourlyDailyData?.timelines?.hourly || [];
@@ -78,11 +97,13 @@ const HourlyForecast = (hourlyDailyData) => {
         className="w-full"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
-          {(hourlyDataBtn ? hourlyData : dailyData).map((data, index) => {
+          {(hourlyDataBtn ? hourlyData : dailyData).map((data : TimelineData, index: number) => {
             const Icon = getWeatherIcon(
-              hourlyDataBtn
-                ? data?.values?.weatherCode
-                : data?.values?.weatherCodeMax
+              (
+                hourlyDataBtn
+                  ? data?.values?.weatherCode
+                  : data?.values?.weatherCodeMax
+              )?.toString() || ""
             );
             return (
               <CarouselItem
