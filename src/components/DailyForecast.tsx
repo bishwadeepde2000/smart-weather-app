@@ -4,11 +4,29 @@ import {
   getWeatherDescription,
   getWeatherIcon,
 } from "../lib/utils";
+import type { RootState } from "../store/store";
 
-const DailyForecast = (hourlyDailyData) => {
-  const theme = useAppSelector((state) => state.theme.theme);
+export interface DailyDataItem {
+  time: string;
+  values: {
+    weatherCodeMax: number;
+    temperatureMax: number;
+    temperatureMin: number;
+  };
+}
+
+export interface DailyForecastProps {
+  hourlyDailyData: {
+    timelines?: {
+      daily?: DailyDataItem[];
+    };
+  };
+}
+
+const DailyForecast = ({ hourlyDailyData }: DailyForecastProps) => {
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
   const isDark = theme === "dark";
-  const dailyData = hourlyDailyData?.hourlyDailyData?.timelines?.daily || [];
+  const dailyData = hourlyDailyData?.timelines?.daily || [];
 
   return (
     <div
@@ -22,7 +40,7 @@ const DailyForecast = (hourlyDailyData) => {
 
       <div className="space-y-3">
         {dailyData.map((data, index) => {
-          const Icon = getWeatherIcon(data?.values?.weatherCodeMax);
+          const Icon = getWeatherIcon(data?.values?.weatherCodeMax.toString());
           return (
             <div
               key={index}
