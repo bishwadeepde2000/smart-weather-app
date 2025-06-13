@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchLocation } from "../../services/weatherService";
 
 interface LocationState {
-  locData: object | null;
+  locData: object | string | null;
   locLoading: boolean;
   locError: string | null;
 }

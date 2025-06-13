@@ -23,13 +23,15 @@ import {
   getWeather,
   getHourlyDailyWeather,
 } from "../store/weather/weatherSlice";
+import type { RootState } from "../store/store";
+import type { AppDispatch } from "../store/store";
 
 const Index = () => {
-  const dispatch = useDispatch();
-  const theme = useAppSelector((state) => state.theme.theme);
+  const dispatch = useDispatch<AppDispatch>();
+  const theme = useAppSelector((state:RootState) => state.theme.theme);
   const { data, hourlyDailyData, loading, error, hourlyDailyError } =
-    useAppSelector((state) => state.weather);
-  const { locLoading } = useSelector((state) => state.location);
+    useAppSelector((state: RootState) => state.weather);
+  const { locLoading } = useSelector((state:RootState) => state.location);
   const isDark = theme === "dark";
   const [city, setCity] = useState("");
   const [locError, setLocError] = useState<string>("");
@@ -38,7 +40,7 @@ const Index = () => {
     dispatch(toggleTheme());
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCity(event.target.value);
   };
 
@@ -63,7 +65,7 @@ const Index = () => {
     );
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && city.trim() !== "") {
       dispatch(getWeather(city.toLowerCase()));
       dispatch(getHourlyDailyWeather(city.toLowerCase()));

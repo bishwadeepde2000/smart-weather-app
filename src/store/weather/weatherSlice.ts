@@ -18,7 +18,7 @@ const initialState: WeatherState = {
   hourlyDailyError: null,
 };
 
-export const getWeather = createAsyncThunk<string>(
+export const getWeather = createAsyncThunk<object, string>(
   'weather/getWeather',
   async (city, thunkAPI) => {
     try {
@@ -30,7 +30,7 @@ export const getWeather = createAsyncThunk<string>(
   }
 );
 
-export const getHourlyDailyWeather = createAsyncThunk<string>(
+export const getHourlyDailyWeather = createAsyncThunk<object, string>(
   'weather/getHourlyDailyWeather',
   async (city, thunkAPI) => {
     try {
