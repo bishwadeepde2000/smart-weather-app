@@ -6,19 +6,39 @@ import {
   getWeatherIcon,
 } from "../lib/utils";
 
-const WeatherCard = (data) => {
-  const theme = useAppSelector((state) => state.theme.theme);
-  const locData = useAppSelector((state) => state.location);
+import type { RootState } from "../store/store";
+export interface WeatherCardProps {
+  data: {
+    location?: {
+      name?: string;
+    };
+    data?: {
+      time?: string;
+      values?: {
+        temperature?: number;
+        temperatureApparent?: number;
+        weatherCode?: number;
+        windSpeed?: number;
+        humidity?: number;
+      };
+    };
+  };
+}
+
+const WeatherCard = ({ data }: WeatherCardProps) => {
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
+  const locData = useAppSelector((state: RootState) => state.location);
 
   const isDark = theme === "dark";
 
-  const locationName = locData?.locData?.[0]?.name || "";
-  const locationState = locData?.locData?.[0]?.state || "";
-  const locationCountry = locData?.locData?.[0]?.country || "";
-  const weatherLocation = data?.data?.location?.name || `${locationName}, ${locationState}, ${locationCountry}` || "Unknown Location";
-  const weatherTime = formatDateTime(data?.data?.data?.time) || "";
-  const weatherValues = data?.data?.data?.values || {};
-  const Icon = getWeatherIcon(weatherValues?.weatherCode);
+  const locationArray = Array.isArray(locData?.locData) ? locData.locData : [];
+  const locationName = locationArray[0]?.name || "";
+  const locationState = locationArray[0]?.state || "";
+  const locationCountry = locationArray[0]?.country || "";
+  const weatherLocation = data?.location?.name || `${locationName}, ${locationState}, ${locationCountry}` || "Unknown Location";
+  const weatherTime = formatDateTime(data?.data?.time || "");
+  const weatherValues = data?.data?.values || {};
+  const Icon = getWeatherIcon(weatherValues?.weatherCode?.toString() || "");
 
   return (
     <div
@@ -50,7 +70,7 @@ const WeatherCard = (data) => {
           </div>
           <div className="space-y-2">
             <p className="text-lg">
-              {getWeatherDescription(weatherValues?.weatherCode)}
+              {getWeatherDescription(weatherValues?.weatherCode ?? 0)}
             </p>
 
             <p className={isDark ? "text-white/80" : "text-gray-600"}>

@@ -188,14 +188,14 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Column - Main Weather */}
               <div className="lg:col-span-2 space-y-6">
-                <WeatherCard data={data} />
-                <HourlyForecast hourlyDailyData={hourlyDailyData} />
+                <WeatherCard data={data ?? {}} />
+                <HourlyForecast hourlyDailyData={hourlyDailyData ?? {}} />
               </div>
 
               {/* Right Column - Additional Info */}
               <div className="space-y-6">
-                <WeatherMetrics data={data} />
-                <DailyForecast hourlyDailyData={hourlyDailyData} />
+                <WeatherMetrics data={data ?? {}} />
+                <DailyForecast hourlyDailyData={hourlyDailyData ?? {}} />
               </div>
             </div>
           </div>

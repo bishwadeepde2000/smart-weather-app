@@ -8,6 +8,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Type for weatherCode keys
+type WeatherCodeKey = keyof typeof weatherCode;
+
 // formatDateTime to get date, time, and relative date from an ISO string
 interface FormattedDateTime {
   date: string; // e.g., "2023-06-10"
@@ -35,7 +38,11 @@ export function formatDateTime(isoString: string): FormattedDateTime {
 
 // getWeatherDescription to get the weather description based on the code
 export function getWeatherDescription(code: number): string {
-  return weatherCode[code] || "Unknown";
+   if (typeof code !== "number") {
+    return "Unknown";
+  }
+  const key = code.toString() as WeatherCodeKey;
+  return weatherCode[key] || "Unknown";
 }
 
 // getWeatherIcon to get the weather icon based on the code

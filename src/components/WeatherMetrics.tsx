@@ -1,15 +1,24 @@
 import { useAppSelector } from "../lib/hooks";
 import { metrics } from "../lib/constants";
+import type { RootState } from "../store/store";
 
-const WeatherMetrics = (data) => {
-  const theme = useAppSelector((state) => state.theme.theme);
+export interface WeatherMetricsProps  {
+  data?: {
+    data?: {
+      values?: Record<string, any>;
+    };
+  };
+};
+
+const WeatherMetrics = (data: WeatherMetricsProps) => {
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
   const isDark = theme === "dark";
 
-  const weatherValues = data?.data?.data?.values || {};
+  const weatherValues: Record<string, any> = data?.data?.data?.values || {};
   const formattedMetrics = getFormattedWeatherMetrics(weatherValues);
 
   // Function to format weather metrics
-  function getFormattedWeatherMetrics(weatherValues: object) {
+  function getFormattedWeatherMetrics(weatherValues: Record<string, any>) {
     return metrics.map((metric) => {
       const rawValue = weatherValues[metric.value];
       const formattedValue =
