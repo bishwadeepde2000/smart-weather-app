@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const BASE_URL = 'https://api.tomorrow.io/v4/weather';
-const OPEN_WEATHER_BASE_URL = 'http://api.openweathermap.org/geo/1.0';
+const LOCATION_IQ_BASE_URL = 'https://us1.locationiq.com/v1';
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-const OPEN_WEATHER_API_KEY = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
+const LOCATION_IQ_API_KEY = process.env.REACT_APP_LOCATION_IQ_API_KEY;
 
 export interface WeatherResponse {
   name: string;
@@ -49,12 +49,12 @@ export const fetchHourlyDailyWeather = async (
 
 // Fetch City name by latitude and longitude
 export const fetchLocation = async (lat: string, lon: string) => {
-  const response = await axios.get(`${OPEN_WEATHER_BASE_URL}/reverse`, {
+  const response = await axios.get(`${LOCATION_IQ_BASE_URL}/reverse`, {
     params: {
+      key: LOCATION_IQ_API_KEY,
       lat: lat,
       lon: lon,
-      limit: "1",
-      apikey: OPEN_WEATHER_API_KEY,
+      format: "json",
     },
   });
   return response?.data;

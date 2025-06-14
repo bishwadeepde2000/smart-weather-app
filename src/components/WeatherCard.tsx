@@ -28,13 +28,16 @@ export interface WeatherCardProps {
 const WeatherCard = ({ data }: WeatherCardProps) => {
   const theme = useAppSelector((state: RootState) => state.theme.theme);
   const locData = useAppSelector((state: RootState) => state.location);
-
   const isDark = theme === "dark";
+  const locationObject = locData?.locData;
 
-  const locationArray = Array.isArray(locData?.locData) ? locData.locData : [];
-  const locationName = locationArray[0]?.name || "";
-  const locationState = locationArray[0]?.state || "";
-  const locationCountry = locationArray[0]?.country || "";
+  // Type guard to check if locationObject is an object with address property
+  const hasAddress = (obj: any): obj is { address: any } =>
+    typeof obj === "object" && obj !== null && "address" in obj;
+
+  const locationName = hasAddress(locationObject) ? locationObject.address?.state_district || "" : "";
+  const locationState = hasAddress(locationObject) ? locationObject.address?.state || "" : "";
+  const locationCountry = hasAddress(locationObject) ? locationObject.address?.country || "" : "";
   const weatherLocation = data?.location?.name || `${locationName}, ${locationState}, ${locationCountry}` || "Unknown Location";
   const weatherTime = formatDateTime(data?.data?.time || "");
   const weatherValues = data?.data?.values || {};
